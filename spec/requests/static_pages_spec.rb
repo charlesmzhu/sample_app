@@ -32,3 +32,5 @@ describe "Static pages" do
   end
 
 end
+
+#before was visit.page()? something like that
