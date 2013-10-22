@@ -7,7 +7,7 @@ describe User do
 
   it {should respond_to(:name, :email, :password_digest, :password, :password_confirmation, :authenticate)}
 
-  it {should be_valid}
+  it {should be_valid} #positive test, after is all the negative tests
 
   describe "when name is not present" do
   	before {@user.name = " "}
@@ -82,7 +82,7 @@ describe User do
       let(:user_for_invalid_password) {found_user.authenticate("invalid")}
 
       it {should_not eq user_for_invalid_password} #tests that authenticate does not return the same thing as the user
-      specify {expect(user_for_invalid_password.to be_false)} #duble checks that authenticate also returns false
+      specify {expect(user_for_invalid_password).to be_false} #duble checks that authenticate also returns false
     end
   end
 end
