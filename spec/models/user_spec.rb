@@ -5,9 +5,15 @@ describe User do
 
   subject { @user }
 
-  it {should respond_to(:name, :email, :password_digest, :password, :password_confirmation, :authenticate)}
+  it {should respond_to(:name, :email, :password_digest, :password, :password_confirmation, :authenticate, 
+    :password_confirmation, :remember_token, :authenticate)}
 
-  it {should be_valid} #positive test, after is all the negative tests
+  it {should be_valid} #positive test, after this is all the negative tests
+
+  describe "remember token" do
+    before {@user.save}
+    its(:remember_token) {should_not be_blank}
+  end
 
   describe "when name is not present" do
   	before {@user.name = " "}
