@@ -49,9 +49,20 @@ describe "User pages" do
 
   describe "profile page" do
     let(:user) {FactoryGirl.create(:user)}
+    let!(:m1) {FactoryGirl.create(:micropost, user: user, content:"Foo")}
+    let!(:m2) {FactoryGirl.create(:micropost, user: user, content:"Bar")}
+    #when there wasn't a bang here, it didn't work
+
     before {visit user_path(user)}
+
     it {should have_content(user.name)}
     it {should have_title(user.name)}
+
+    describe "microposts" do
+      it {should have_content(m1.content)}
+      it {should have_content(m2.content)}
+      it {should have_content(user.microposts.count)}
+    end
   end
 
   describe "edit" do
@@ -142,7 +153,7 @@ describe "User pages" do
         let(:user) { FactoryGirl.create(:user)}
         let(:non_admin) { FactoryGirl.create(:user)}
 
-        before{sign_in non_admin, no_capybar: true}
+        before{sign_in non_admin, no_capybara: true}
 
         describe "submitting a DELETE request to the Users#destroy section" do
           before {delete user_path(user)}

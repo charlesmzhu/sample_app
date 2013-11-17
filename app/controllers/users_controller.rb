@@ -15,6 +15,7 @@ class UsersController < ApplicationController
 
   def show
   	@user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
   def create
@@ -50,13 +51,6 @@ class UsersController < ApplicationController
   	def user_params
   		params.require(:user).permit(:name, :email, :password, :password_confirmation)
   	end #params requires the user (the only key with multiple hashes as a value), and then permits the others
-
-    def signed_in_user
-      unless signed_in?
-        store_location
-        redirect_to signin_url, notice: "Please sign in"
-      end
-    end
 
     def correct_user
       @user = User.find(params[:id])

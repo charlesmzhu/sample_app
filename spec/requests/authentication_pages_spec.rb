@@ -2,13 +2,14 @@ require 'spec_helper'
 
 describe "Authentication" do
 	subject {page}
+	let(:user) {FactoryGirl.create(:user)}
 
 	describe "signin page" do
 		before {visit signin_path}
 
 		it {should have_content('Sign in')}
 		it {should have_title('Sign in')}
-		it {should_not have_link('Profile',     href: user_path(user))}
+		it {should_not have_link('Profile',   href: user_path(user))}
 		it {should_not have_link('Users',     href: users_path)}
 	end
 
@@ -23,7 +24,6 @@ describe "Authentication" do
 		end
 
 		describe "with valid information" do
-			let(:user) {FactoryGirl.create(:user)}
 			before do
 				fill_in "Email",	with: user.email.upcase
 				fill_in "Password",	with: user.password
@@ -52,6 +52,18 @@ describe "Authentication" do
 	describe "authorization" do
 		describe "for non-signed-in users" do
 			let(:user) {FactoryGirl.create(:user)}
+
+			describe "in the Microposts controller" do
+				describe "submitting to the create action" do
+					before {post microposts_path}
+					specify {expect(response).to redirect_to(signin_path)}
+				end
+
+				describe "submitting to the destroy action" do
+					before {delete micropost_path(FactoryGirl.create(:micropost))}
+					specify {expect(response).to redirect_to(signin_path)}
+				end
+			end
 
 			describe "when attempting to visit a protected page" do
 				before do
