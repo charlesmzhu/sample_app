@@ -1,7 +1,13 @@
 SampleApp::Application.routes.draw do
   resources :microposts, only: [:create, :destroy]
 
-  resources :users
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
+
+  resources :relationships, only: [:create, :destroy]
 
   root 'static_pages#home' 
   match '/home', to: 'static_pages#home',  via: 'get'
